@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>M-Pesa Payment Request</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="payment-card">
+        <div class="logo">
+          <img
+            src="https://www.safaricom.co.ke/images/mpesa-logo.png"
+            alt="M-Pesa Logo"
+          />
+        </div>
+        <h2>Send Payment Request</h2>
+        <form id="paymentForm">
+          <div class="form-group">
+            <label for="phoneNumber">Recipient's Phone Number</label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              placeholder="e.g., 254712345678"
+              required
+            />
+            <small>Format: 254712345678</small>
+          </div>
+          <button type="submit" class="pay-button">Send Payment Request</button>
+        </form>
+        <div id="status" class="status-message"></div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
