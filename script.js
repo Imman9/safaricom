@@ -1,3 +1,5 @@
+import config from "./config.js";
+
 document
   .getElementById("paymentForm")
   .addEventListener("submit", async function (e) {
@@ -18,19 +20,16 @@ document
     try {
       showStatus("Sending payment request...", "success");
 
-      // Make API call to our backend
-      const response = await fetch(
-        "http://localhost:3000/api/initiate-payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            phoneNumber,
-          }),
-        }
-      );
+      // Make API call to our backend using the configured URL
+      const response = await fetch(`${config.apiUrl}/api/initiate-payment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phoneNumber,
+        }),
+      });
 
       const data = await response.json();
 

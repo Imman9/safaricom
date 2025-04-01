@@ -7,8 +7,30 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// CORS configuration
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5500",
+  "https://safaricom-rho.vercel.app/", // Replace with your actual frontend domain
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
@@ -55,7 +77,7 @@ function generatePassword(shortcode, passkey, timestamp) {
 app.post("/api/initiate-payment", async (req, res) => {
   try {
     const { phoneNumber } = req.body;
-    const amount = 1000; // Fixed amount of 1000 KES
+    const amount = 1; // Fixed amount of 1000 KES
 
     // Get access token
     const accessToken = await getAccessToken();
@@ -78,9 +100,10 @@ app.post("/api/initiate-payment", async (req, res) => {
       PartyA: phoneNumber,
       PartyB: process.env.MPESA_SHORTCODE,
       PhoneNumber: phoneNumber,
-      CallBackURL: "https://your-callback-url.com/callback", // Replace with your callback URL
+      CallBackURL:
+        process.env.CALLBACK_URL || "https://safaricom-backend.onrender.com",
       AccountReference: "PaymentRequest",
-      TransactionDesc: "Payment request of 1000 KES",
+      TransactionDesc: "Payment request of 1 KES",
     };
 
     // Make STK Push request
